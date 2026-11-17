@@ -1,0 +1,26 @@
+name: Upstream Sync
+
+on:
+  schedule:
+    - cron: "0 0 * * *" # Runs daily at midnight
+  workflow_dispatch: # Allows manual triggering
+
+jobs:
+  repo-sync:
+    runs-on: ubuntu-latest
+    # Required permissions for the GITHUB_TOKEN to push changes
+    permissions:
+      contents: write
+      pull-requests: write
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: actions-template-sync
+        uses: AndreasAugustin/actions-template-sync@v2.5.2
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          source_repo_path: "sparkly-games/sparkly"
+          # Optional: define a specific branch if not using the default
+          # source_branch: main

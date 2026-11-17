@@ -1,0 +1,15 @@
+rm -rf export
+npm run export
+
+cp 'export/[...404].html' export/404.html
+firebase deploy --only hosting
+
+git add .
+git commit -m "Update - $(date)"
+git push origin development
+
+gh pr create --base main --head development --title "Merge development to main - $(date)" --body "Merges branches."
+gh pr merge development --merge --admin
+gh release create --title "" --notes "" --target main --discussion-category "Releases" --generate-notes  
+
+echo "Export complete."

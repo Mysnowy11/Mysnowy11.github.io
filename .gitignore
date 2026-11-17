@@ -1,0 +1,56 @@
+# Expo / Expo CLI
+expo-env.d.ts
+.expo/
+expo-env.d.ts
+
+# Dependencies
+node_modules/
+
+# Builds
+dist/
+web-build/
+android/app/build/
+ios/build/
+
+# Logs
+npm-debug.*
+yarn-debug.*
+yarn-error.*
+firebase-debug.log
+
+# Env files (secrets)
+.env*
+!.env.example
+
+# OS
+.DS_Store
+
+# TypeScript
+*.tsbuildinfo
+
+# Firebase
+.firebaserc
+firebase.json
+.firebase/
+
+# Misc tooling
+.metro-health-check*
+
+# Web / tools
+.vercel
+
+# Optional / project-specific (verify these are intentional)
+# app-example
+# maybe-add
+# export
+
+# Android / iOS extras
+android/app/src/main/assets/sparxapi.db
+
+# Certificates
+*.pem
+
+export/
+dist/
+
+.tmp/
