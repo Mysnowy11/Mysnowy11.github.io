@@ -1,0 +1,47 @@
+name: Deploy to gh-pages branch
+on:
+  push:
+    branches: [main]
+permissions:
+  contents: write
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: 'npm'
+
+      - name: Create .env file
+        uses: SpicyPizza/create-envfile@v2.0
+        with:
+          envkey_EXPO_PUBLIC_FIREBASE_API_KEY: ${{ secrets.FIREBASE_API_KEY }}
+          envkey_EXPO_PUBLIC_USE_ANALYTICS: true
+          envkey_EXPO_PUBLIC_USE_STATUSPAGE: true
+          envkey_EXPO_PUBLIC_STATUSPAGE_URL: https://sparkly.statuspage.io/embed/script.js
+          envkey_EXPO_PUBLIC_JOB_WEBHOOK: ${{ secrets.DISCORD_WEBHOOK }}
+          envkey_EXPO_PUBLIC_GOOGLE_AI_KEY: ${{ secrets.GOOGLE_AI_KEY }}
+          envkey_EXPO_PUBLIC_YT_API_KEY: ${{ secrets.YT_API_KEY }}
+          envkey_EXPO_PUBLIC_COBALT_URL: https://cobalt-backend.canine.tools/
+          envkey_EXPO_PUBLIC_CLOUDINARY_CLOUD_NAME: dxbaytptg
+          file_name: .env
+          fail_on_empty: true
+
+      - name: Install and Build
+        run: |
+          npm install
+          npx expo export -p web
+          # 1. Tell GitHub Pages to stop blocking the _expo folder
+          touch dist/.nojekyll
+          # 2. Copy your 404 handler (wrapped in quotes so bash doesn't trip on the brackets)
+          cp "dist/[...404].html" dist/404.html
+
+      - name: Deploy to Branch 🚀
+        uses: JamesIves/github-pages-deploy-action@v4
+        with:
+          branch: gh-pages
+          folder: dist
